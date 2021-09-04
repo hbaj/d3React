@@ -1,14 +1,18 @@
+import {render} from "react-dom";
+import App from "./components/App"
 import { select,scaleLinear, axisLeft, axisBottom } from 'd3';
+
 import "./styles/index.scss"
 
+render(<App/>,document.getElementById("root"));
 
 
 // console.log(a);
 // function 
-render();
-window.addEventListener('resize', render);
+renderD3();
+window.addEventListener('resize', renderD3);
 
-function render() {
+function renderD3() {
     const screen_props = {
         width: document.body.clientWidth-50,
         height: document.body.clientHeight - 200,
@@ -22,9 +26,11 @@ function render() {
 function myResponsiveComponent(container, props) {
     const { width, height, margin, tickSeparationRatio } = props;
     let svg = container.selectAll('svg').data([null]);
+    console.log(svg, 'chekcing initial svg');
     svg = svg.join('svg')
         .attr('width', width)
         .attr('height', height);
+    console.log(svg, 'chekcing second svg');
 
     const { g, innerWidth, innerHeight } = marginConvention(svg, { width, height, margin })
 
