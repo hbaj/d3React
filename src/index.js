@@ -26,11 +26,11 @@ function renderD3() {
 function myResponsiveComponent(container, props) {
     const { width, height, margin, tickSeparationRatio } = props;
     let svg = container.selectAll('svg').data([null]);
-    console.log(svg, 'chekcing initial svg');
+    // console.log(svg, 'chekcing initial svg');
     svg = svg.join('svg')
         .attr('width', width)
         .attr('height', height);
-    console.log(svg, 'chekcing second svg');
+    // console.log(svg, 'chekcing second svg');
 
     const { g, innerWidth, innerHeight } = marginConvention(svg, { width, height, margin })
 

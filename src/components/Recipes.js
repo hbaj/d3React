@@ -8,10 +8,11 @@ const frutas = {
     manzanas: 8,
     peras: 3,
 };
-console.log(animales);
+// console.log(animales);
 
 const Recipes = () => {
     const [recipe, setRecipe] = useState({});
+    console.log('checking prop keys:',Object.keys(animales));
     return(
     <div>
         <h3>Current Recipe</h3>
@@ -23,7 +24,7 @@ const Recipes = () => {
         </button>
         <ul>
             {Object.keys(recipe).map((material) => (
-                <li>
+                <li key = {material}>
                     {material}:{recipe[material]}
                 </li>
             ))}
