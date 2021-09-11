@@ -1,5 +1,5 @@
 import Recipes from "./Recipes";
-// import snoopy from "../images/snoopy.jpg" ; //*************import images NOT working *************
+import snoopy from "../images/snoopy.jpg" ; //*************import images NOT working *************
 import AllPeople from "./quest"
 function App() {
     return (
@@ -10,7 +10,7 @@ function App() {
                         <h1> hola from react</h1>
                 
                     </section>
-                    {/* <img src={snoopy} alt = "snoopy1" width= "250" /> */}
+                    <img src={snoopy} alt = "snoopy1" width= "250" />
                     <Recipes/>
                 </main>
                 
