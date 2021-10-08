@@ -15,8 +15,8 @@ function App() {
   const djangoApiUrl = "http://192.168.1.222:8000/var-meassures/";
 
   function props() {
-    let width = document.body.clientWidth;
-    let height = document.body.clientHeight;
+    let width = document.body.clientWidth-100;
+    let height = document.body.clientHeight-200;
     let margin = { top: 30, bottom: 100, left: 100, right: 30 };
     let tickSeparationRatio = 70;
     return {
@@ -34,7 +34,12 @@ function App() {
       const datos = await axios.get(djangoApiUrl);
 
       // console.log("datos after promise completion:", datos);
-      const datosArray = datos.data.results;
+      // const datosArray = datos.data.results;
+      const datosArray = datos.data.results
+      datosArray.forEach(d => {
+        d.value = +d.value;
+        d.date = new Date(d.date);
+      });
       // const datosArray = datos_.map((d) => +d.value * Math.random());
       console.log("array fixed from axios:", datosArray);
       setR(datosArray);
@@ -60,6 +65,8 @@ function App() {
   useEffect(() => {
     console.log("1--inside useEffect function", r);
     const { width, height, margin, tickSeparationRatio } = props();
+    
+    console.log("screen props useEffect function", width, height, margin.bottom,height - margin.bottom);
     sendGetRequest();
     // x = "noHola";
     console.log("AXIOS DATA--inside useEffect function", r);
@@ -68,32 +75,36 @@ function App() {
       console.log("inside !r check");
       return null;
     }
+    // const parseDate = timeParse('%Y-%m-%d %H:%M:%S')
     const xAxisProps = calculateAxisProperties(r.map((d) => d.date));
-    const parseDate = timeParse('%Y-%m-%d')
+    
     const yAxisProps = calculateAxisProperties(r.map((d) => d.value));
     console.log(xAxisProps, "\n", yAxisProps);
     const svg = select(svgRef.current)
-      .attr("width", width*0.7)
-      .attr("height", height*0.5)
+      .attr("width", width-margin.left)
+      .attr("height", height-margin.top)
       .style("background-color", "green")
       .selectAll("g")
       .data([0])
       .join("g")
       .attr("class", "g-margin-plot")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+      .attr("transform", "translate(" + margin.left + " " + margin.top + ")")
       .style("background-color", "purple");
 
     console.log("x properties: ", xAxisProps);
 
     // ########### x axis setup ############
+    var xmin = new Date(xAxisProps[0] );
+    var xmax = new Date(xAxisProps[1] );
+    xmin.toDateString();
+    xmax.toDateString();
     const xScale = scaleTime()
-   /* enter data to modify y scale   */
-      .range([0, 200])
-      // .range([+yAxisProps.max,+yAxisProps.min])
-      .domain([parseDate('2021-09-26') , parseDate('2021-09-31')]);
-      // .domain([0, +yAxisProps.max]);
 
-      console.log('yScale:',xScale)
+   /* enter data to modify y scale   */
+      .range([0, width-margin.right-250])
+      // .range([+yAxisProps.max,+yAxisProps.min])
+      .domain([xmin, xmax]);
+ 
     const xAxis = axisBottom(xScale)
     // .ticks(
     //   (height - margin.top) / tickSeparationRatio
@@ -101,16 +112,16 @@ function App() {
     let xAxisG = svg.selectAll(".g-margin-plot")
                     .data([0])
                     .join('g')
-                    .attr("transform", "translate(0 " + '20' + ")")
+                    .attr("transform", "translate(0 " + (height - margin.bottom).toString() + ")")
                     .call(xAxis)
                     ;
 
     // ########### y axis setup ############
     const yScale = scaleLinear()
    /* enter data to modify y scale   */
-      .range([0, 90])
+      .range([height-margin.bottom, 90])
       // .range([+yAxisProps.max,+yAxisProps.min])
-      .domain([0, 800]);
+      .domain([0, yAxisProps[1]]);
       // .domain([0, +yAxisProps.max]);
 
       console.log('yScale:',yScale)
@@ -121,7 +132,7 @@ function App() {
     let yAxisG = svg.selectAll(".g-margin-plot")
                     .data([0])
                     .join('g')
-                    .attr("transform", "translate(0 " + '20' + ")")
+                    // .attr("transform", "translate(0 " + '20' + ")")
                     .call(yAxis)
                     ;
 
@@ -135,8 +146,8 @@ function App() {
         (exit) => exit.remove()
       )
       .attr("r", 10)
-      .attr("cx", (r) => +r.value * Math.random())
-      .attr("cy", (r) => r.value)
+      .attr("cx", (r) => xScale(r.date))
+      .attr("cy", (r) => yScale(r.value))
       .attr("stroke", "red");
 
     return () => {
