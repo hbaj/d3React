@@ -26,16 +26,6 @@ const ScatterPlot = () => {
   const svgRef = useRef();
   const { width, height, margin, tickSeparationRatio } = PropCharts();
 
-  // const svg = select(svgRef.current)
-  // .attr("width", width - margin.left)
-  // .attr("height", height - margin.top)
-  // .style("background-color", "blue")
-  // .selectAll("g")
-  // .data([0])
-  // .join("g")
-  // .attr("class", "g-margin-plot")
-  // .attr("transform", "translate(" + margin.left + " " + margin.top + ")")
-  // .style("background-color", "purple");
   const djangoApiUrl = "http://192.168.1.222:8000/var-meassures/";
   useEffect(() => {
     console.log("1 @@@@@ inside Plot.js useEffect function", r);
