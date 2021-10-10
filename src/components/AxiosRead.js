@@ -4,7 +4,7 @@ import React from "react";
 
 
   const  sendGetRequest = async (djangoApiUrl) => {
-   
+    if(true){
     try {
       const datos = await axios.get(djangoApiUrl);
       console.log("datos right after axios:",datos);
@@ -25,6 +25,10 @@ import React from "react";
       console.error(err);
       // return err
     }
+  }
+  else {
+    return null
+  }
   };
 
   export default sendGetRequest

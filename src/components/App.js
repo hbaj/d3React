@@ -15,12 +15,12 @@ import {
 } from "d3";
 
 function App() {
-  //console.log(`1-initial data->:`, r);
+
 
   const [r, setR] = useState(null);
   const [flag, setFlag] = useState(0);
   const svgRef = useRef();
-  // var x = "hola";
+
   const djangoApiUrl = "http://192.168.1.222:8000/var-meassures/";
 
   function props() {
@@ -36,34 +36,6 @@ function App() {
     };
   }
 
-  //console.log("2-initial data->:", r);
-
-  // const sendGetRequest = async () => {
-  //   try {
-  //     const datos = await axios.get(djangoApiUrl);
-
-  //     // //console.log("datos after promise completion:", datos);
-  //     // const datosArray = datos.data.results;
-  //     const datosArray = datos.data.results
-  //     datosArray.forEach(d => {
-  //       d.value = +d.value;
-  //       d.date = new Date(d.date);
-  //     });
-  //     // const datosArray = datos_.map((d) => +d.value * Math.random());
-  //     //console.log("array fixed from axios:", datosArray);
-  //     setR(datosArray);
-  //     //console.log(
-  //       "***************Axios request complete - Updating state :",
-  //       datosArray
-  //     );
-
-  //     // //console.log(resp.data);
-  //   } catch (err) {
-  //     // Handle Error Here
-  //     //console.error(err);
-  //   }
-  // };
-
   function calculateAxisProperties(axisData) {
     let b = min(axisData);
     let c = max(axisData);
@@ -74,31 +46,19 @@ function App() {
   useEffect(() => {
     console.log("1--inside useEffect function", r);
     const { width, height, margin, tickSeparationRatio } = props();
-
-    //console.log("screen props useEffect function", width, height, margin.bottom,height - margin.bottom);
-    const axiosDatos = sendGetRequest(djangoApiUrl); //.then(d => //console.log('comeback to APP from axios query',d));
-    //console.log("***************array fixed from axios:", axiosDatos);
-
-    // x = "noHola";
+    console.log('flag:', flag);
+    
+    const axiosDatos = sendGetRequest(djangoApiUrl); 
     axiosDatos.then(res => setR(res));
-    console.log("  inside useEffect function->r:", r, "type of r:", typeof r);
-    console.log(
-      "  inside useEffect function->axiosDatos:",
-      axiosDatos,
-      "type axiosDatos:",
-      typeof axiosDatos
-    );
+    
     if (!r) {
       console.log("inside !r check");
-      return null;
+      return <h1>loading...</h1>;
     }
-    // //console.log("AXIOS DATA--inside useEffect function", datos_);
-    //console.log("AXIOS DATA--inside useEffect function", r);
     // const parseDate = timeParse('%Y-%m-%d %H:%M:%S')
     const xAxisProps = calculateAxisProperties(r.map((d) => d.date));
 
     const yAxisProps = calculateAxisProperties(r.map((d) => d.value));
-    //console.log(xAxisProps, "\n", yAxisProps);
     const svg = select(svgRef.current)
       .attr("width", width - margin.left)
       .attr("height", height - margin.top)
@@ -110,8 +70,6 @@ function App() {
       .attr("transform", "translate(" + margin.left + " " + margin.top + ")")
       .style("background-color", "purple");
 
-    //console.log("x properties: ", xAxisProps);
-
     // ########### x axis setup ############
     var xmin = new Date(xAxisProps[0]);
     var xmax = new Date(xAxisProps[1]);
@@ -120,7 +78,6 @@ function App() {
     const xScale = scaleTime()
       /* enter data to modify y scale   */
       .range([0, width - margin.right - 250])
-      // .range([+yAxisProps.max,+yAxisProps.min])
       .domain([xmin, xmax])
       .nice();
 
@@ -141,12 +98,9 @@ function App() {
     const yScale = scaleLinear()
       /* enter data to modify y scale   */
       .range([height - margin.bottom, 90])
-      // .range([+yAxisProps.max,+yAxisProps.min])
       .domain([0, yAxisProps[1]])
       .nice();
-    // .domain([0, +yAxisProps.max]);
 
-    //console.log('yScale:',yScale)
     const yAxis = axisLeft(yScale);
     // .ticks(
     //   (height - margin.top) / tickSeparationRatio
@@ -159,7 +113,6 @@ function App() {
       .call(yAxis);
     // ########### legend setup ############
     const legendData = [...new Set(r.map((d) => d.variable))];
-    //console.log('legend data', legendData)
 
     svg
       .selectAll("circle")
@@ -174,9 +127,7 @@ function App() {
       .attr("cy", (r) => yScale(r.value))
       .attr("stroke", "red");
 
-    return () => {
-      //console.log("inside useEffect cleaning function");
-    };
+    return () => {   };
   }, [flag]);
 
   return (
@@ -186,7 +137,7 @@ function App() {
       <h1> hola from inside APP</h1>
       <button
         onClick={() => {
-          setFlag(flag + 1);
+          setFlag(flag +1);
           //console.log("buttonchange radius:", r);
         }}
       >
