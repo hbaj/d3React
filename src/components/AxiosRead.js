@@ -7,7 +7,7 @@ import React from "react";
     if(true){
     try {
       const datos = await axios.get(djangoApiUrl);
-      console.log("datos right after axios:",datos);
+      // console.log("datos right after axios:",datos);
       // const datosArray = datos.data.results;
       const datosArray = datos.data.results
       datosArray.forEach(d => {
@@ -16,7 +16,7 @@ import React from "react";
       });
      
 
-      console.log("***************Axios request complete - Updating state :", datosArray);
+      // console.log("***************Axios request complete - Updating state :", datosArray);
       return(datosArray)
       ;
 

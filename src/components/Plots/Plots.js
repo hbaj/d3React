@@ -6,34 +6,47 @@ import {
   timeParse,
   axisLeft,
   axisBottom,
-
+  min,
+  max,
+  extent,
 } from "d3";
-import snoopy from "../images/snoopy.jpg";
-import sendGetRequest from "./AxiosRead";
-import PropCharts from "./Plots/PropsChart";
-import CalculateChartProperties from "./Plots/CalculateChartProperties";
-import ScatterPlot from "./Plots/Plots";
-
-function App() {
+import sendGetRequest from "../AxiosRead";
+import PropCharts from "./PropsChart";
+import CalculateChartProperties from "./CalculateChartProperties";
+// import { DelegatedPlugin } from "webpack";
 
 
+
+
+
+const ScatterPlot = () => {
+  
   const [r, setR] = useState(null);
   const [flag, setFlag] = useState(0);
   const svgRef = useRef();
+  const { width, height, margin, tickSeparationRatio } = PropCharts();
 
+  // const svg = select(svgRef.current)
+  // .attr("width", width - margin.left)
+  // .attr("height", height - margin.top)
+  // .style("background-color", "blue")
+  // .selectAll("g")
+  // .data([0])
+  // .join("g")
+  // .attr("class", "g-margin-plot")
+  // .attr("transform", "translate(" + margin.left + " " + margin.top + ")")
+  // .style("background-color", "purple");
   const djangoApiUrl = "http://192.168.1.222:8000/var-meassures/";
-
-
   useEffect(() => {
-    console.log("1--inside useEffect function", r);
+    console.log("1 @@@@@ inside Plot.js useEffect function", r);
     const { width, height, margin, tickSeparationRatio } = PropCharts();
     console.log('flag:', flag);
-    
+    // const djangoApiUrl = "http://192.168.1.222:8000/var-meassures/";
     const axiosDatos = sendGetRequest(djangoApiUrl); 
     axiosDatos.then(res => setR(res));
-    
+    console.log('inside Plots.js r:', r)
     if (!r) {
-      console.log("inside !r check");
+      console.log("inside !r  Plots.js check");
       return <h1>loading...</h1>;
     }
     // const parseDate = timeParse('%Y-%m-%d %H:%M:%S')
@@ -111,13 +124,12 @@ function App() {
     return () => {   };
   }, [flag]);
 
-  return (
-    <React.Fragment>
 
+
+  return (
+    <div id="scatter-plot-A">
+        
       <svg ref={svgRef}></svg>
-      <br />
-      <ScatterPlot/>
-      <h1> hola from inside APP</h1>
       <button
         onClick={() => {
           setFlag(flag +1);
@@ -126,8 +138,7 @@ function App() {
       >
         Radius change
       </button>
-    </React.Fragment>
+    </div>
   );
-}
-
-export default App;
+};
+export default ScatterPlot;
