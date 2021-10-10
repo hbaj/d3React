@@ -1,132 +1,17 @@
 import React, { useState, useRef, useEffect } from "react";
-import {
-  select,
-  scaleLinear,
-  scaleTime,
-  timeParse,
-  axisLeft,
-  axisBottom,
-
-} from "d3";
 import snoopy from "../images/snoopy.jpg";
-import sendGetRequest from "./AxiosRead";
-import PropCharts from "./Plots/PropsChart";
-import CalculateChartProperties from "./Plots/CalculateChartProperties";
 import ScatterPlot from "./Plots/Plots";
 
 function App() {
 
 
-  const [r, setR] = useState(null);
-  const [flag, setFlag] = useState(0);
-  const svgRef = useRef();
-
-  const djangoApiUrl = "http://192.168.1.222:8000/var-meassures/";
-
-
-  useEffect(() => {
-    console.log("1--inside useEffect function", r);
-    const { width, height, margin, tickSeparationRatio } = PropCharts();
-    console.log('flag:', flag);
-    
-    const axiosDatos = sendGetRequest(djangoApiUrl); 
-    axiosDatos.then(res => setR(res));
-    
-    if (!r) {
-      console.log("inside !r check");
-      return <h1>loading...</h1>;
-    }
-    // const parseDate = timeParse('%Y-%m-%d %H:%M:%S')
-    const xAxisProps = CalculateChartProperties(r.map((d) => d.date));
-
-    const yAxisProps = CalculateChartProperties(r.map((d) => d.value));
-    const svg = select(svgRef.current)
-      .attr("width", width - margin.left)
-      .attr("height", height - margin.top)
-      .style("background-color", "green")
-      .selectAll("g")
-      .data([0])
-      .join("g")
-      .attr("class", "g-margin-plot")
-      .attr("transform", "translate(" + margin.left + " " + margin.top + ")")
-      .style("background-color", "purple");
-
-    // ########### x axis setup ############
-    var xmin = new Date(xAxisProps[0]);
-    var xmax = new Date(xAxisProps[1]);
-    xmin.toDateString();
-    xmax.toDateString();
-    const xScale = scaleTime()
-      /* enter data to modify y scale   */
-      .range([0, width - margin.right - 250])
-      .domain([xmin, xmax])
-      .nice();
-
-    const xAxis = axisBottom(xScale);
-    // .ticks(
-    //   (height - margin.top) / tickSeparationRatio
-    // );
-    let xAxisG = svg
-      .selectAll(".g-margin-plot")
-      .data([0])
-      .join("g")
-      .attr(
-        "transform",
-        "translate(0 " + (height - margin.bottom).toString() + ")"
-      )
-      .call(xAxis);
-    // ########### y axis setup ############
-    const yScale = scaleLinear()
-      /* enter data to modify y scale   */
-      .range([height - margin.bottom, 90])
-      .domain([0, yAxisProps[1]])
-      .nice();
-
-    const yAxis = axisLeft(yScale);
-    // .ticks(
-    //   (height - margin.top) / tickSeparationRatio
-    // );
-    let yAxisG = svg
-      .selectAll(".g-margin-plot")
-      .data([0])
-      .join("g")
-      // .attr("transform", "translate(0 " + '20' + ")")
-      .call(yAxis);
-    // ########### legend setup ############
-    const legendData = [...new Set(r.map((d) => d.variable))];
-
-    svg
-      .selectAll("circle")
-      .data(r)
-      .join(
-        (enter) => enter.append("circle").attr("class", "new"),
-        (update) => update.attr("class", "udpated"),
-        (exit) => exit.remove()
-      )
-      .attr("r", 10)
-      .attr("cx", (r) => xScale(r.date))
-      .attr("cy", (r) => yScale(r.value))
-      .attr("stroke", "red");
-
-    return () => {   };
-  }, [flag]);
-
   return (
-    <React.Fragment>
+    <>
 
-      <svg ref={svgRef}></svg>
-      <br />
       <ScatterPlot/>
       <h1> hola from inside APP</h1>
-      <button
-        onClick={() => {
-          setFlag(flag +1);
-          //console.log("buttonchange radius:", r);
-        }}
-      >
-        Radius change
-      </button>
-    </React.Fragment>
+     
+    </>
   );
 }
 
