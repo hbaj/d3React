@@ -4,19 +4,18 @@ import {
   scaleLinear,
   scaleTime,
   timeParse,
+  timeFormat,
   axisLeft,
   axisBottom,
   min,
   max,
   extent,
+  timeHour,
 } from "d3";
 import sendGetRequest from "../AxiosRead";
 import PropCharts from "./PropsChart";
 import CalculateChartProperties from "./CalculateChartProperties";
 // import { DelegatedPlugin } from "webpack";
-
-
-
 
 
 const ScatterPlot = () => {
@@ -39,7 +38,8 @@ const ScatterPlot = () => {
       console.log("inside !r  Plots.js check");
       return <h1>loading...</h1>;
     }
-    // const parseDate = timeParse('%Y-%m-%d %H:%M:%S')
+    // const formatTime = timeFormat('%Y-%m-%d %H:%M:%S')
+    const formatTime = timeFormat('%y/%m/%d');
     const xAxisProps = CalculateChartProperties(r.map((d) => d.date));
 
     const yAxisProps = CalculateChartProperties(r.map((d) => d.value));
@@ -57,18 +57,22 @@ const ScatterPlot = () => {
     // ########### x axis setup ############
     var xmin = new Date(xAxisProps[0]);
     var xmax = new Date(xAxisProps[1]);
+    console.log('---->',xmin, typeof xmin);
+
     xmin.toDateString();
     xmax.toDateString();
+    var deltaX = timeHour.count(xmin,xmax);
+    // console.log('======>',xmin);
     const xScale = scaleTime()
       /* enter data to modify y scale   */
       .range([0, width - margin.right - 250])
       .domain([xmin, xmax])
       .nice();
 
-    const xAxis = axisBottom(xScale);
-    // .ticks(
-    //   (height - margin.top) / tickSeparationRatio
-    // );
+    const xAxis = axisBottom(xScale)
+    .ticks(
+      deltaX/tickSeparationRatio
+    );
     let xAxisG = svg
       .selectAll(".g-margin-plot")
       .data([0])
@@ -77,18 +81,23 @@ const ScatterPlot = () => {
         "transform",
         "translate(0 " + (height - margin.bottom).toString() + ")"
       )
-      .call(xAxis);
+      .call(xAxis)
+      .selectAll("text")     // here down will fix all thick mark orientations
+      .style("text-anchor", "end")
+      .attr("dx", "-.8em")
+      .attr("dy", ".15em")
+      .attr("transform", "rotate(-35)");
     // ########### y axis setup ############
     const yScale = scaleLinear()
       /* enter data to modify y scale   */
-      .range([height - margin.bottom, 90])
+      .range([height - margin.bottom, margin.top])
       .domain([0, yAxisProps[1]])
       .nice();
 
-    const yAxis = axisLeft(yScale);
-    // .ticks(
-    //   (height - margin.top) / tickSeparationRatio
-    // );
+    const yAxis = axisLeft(yScale)
+    .ticks(
+      (height - margin.top) / tickSeparationRatio
+    );
     let yAxisG = svg
       .selectAll(".g-margin-plot")
       .data([0])
@@ -106,7 +115,7 @@ const ScatterPlot = () => {
         (update) => update.attr("class", "udpated"),
         (exit) => exit.remove()
       )
-      .attr("r", 10)
+      .attr("r", 7)
       .attr("cx", (r) => xScale(r.date))
       .attr("cy", (r) => yScale(r.value))
       .attr("stroke", "red");

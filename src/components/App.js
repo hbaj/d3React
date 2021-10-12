@@ -9,6 +9,9 @@ function App() {
     <>
 
       <ScatterPlot/>
+      <ScatterPlot/>
+      <ScatterPlot/>
+      <ScatterPlot/>
       <h1> hola from inside APP</h1>
      
     </>

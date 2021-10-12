@@ -11,7 +11,7 @@ import React from "react";
       // const datosArray = datos.data.results;
       const datosArray = datos.data.results
       datosArray.forEach(d => {
-        d.value = +d.value;
+        d.value = +d.value * Math.random();
         d.date = new Date(d.date);
       });
      
