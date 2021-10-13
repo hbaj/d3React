@@ -1,7 +1,15 @@
+const path = require("path");
+var HtmlWebpackPlugin = require("html-webpack-plugin")
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+
 module.exports = {
   mode: "development",
   entry: ['@babel/polyfill', './src/index.js'],
+  output:{
+    filename: "main.[contenthash].js",
+    path: path.resolve(__dirname,"dist"),
+    clean:true,
+  },
   module: {
     rules: [
       {
@@ -26,7 +34,11 @@ module.exports = {
       },
     ],
   },
-  plugins: [new MiniCssExtractPlugin()],
+  plugins: [new MiniCssExtractPlugin(), new HtmlWebpackPlugin({
+    title: 'Phoenix',
+    template:"./src/template.html",
+    inject:'body',
+  })],
   resolve: {
     extensions: [".js", ",jsx"],
   },
