@@ -43,10 +43,11 @@ const ScatterPlot = () => {
     const xAxisProps = CalculateChartProperties(r.map((d) => d.date));
 
     const yAxisProps = CalculateChartProperties(r.map((d) => d.value));
+    //const legendData = legends(r.map(d => d.))
     const svg = select(svgRef.current)
       .attr("width", width - margin.left)
       .attr("height", height - margin.top)
-      .style("background-color", "green")
+      .style("background-color", "white")
       .selectAll("g")
       .data([0])
       .join("g")
@@ -115,10 +116,12 @@ const ScatterPlot = () => {
         (update) => update.attr("class", "udpated"),
         (exit) => exit.remove()
       )
-      .attr("r", 7)
+      .attr("r", 5)
       .attr("cx", (r) => xScale(r.date))
       .attr("cy", (r) => yScale(r.value))
-      .attr("stroke", "red");
+      .attr("fill", 'red')
+      .attr("fill-opacity",0.5)
+      .attr('stroke', 'red');
 
     return () => {   };
   }, [flag]);
