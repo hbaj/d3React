@@ -47,7 +47,7 @@ const ScatterPlot = () => {
     const svg = select(svgRef.current)
       .attr("width", width - margin.left)
       .attr("height", height - margin.top)
-      .style("background-color", "white")
+      .style("background-color", "yellow")
       .selectAll("g")
       .data([0])
       .join("g")

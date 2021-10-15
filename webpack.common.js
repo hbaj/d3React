@@ -5,13 +5,8 @@ const {CleanWebpackPlugin} = require("clean-webpack-plugin");
 const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 
 module.exports = {
-  mode: "development",
   entry: ['@babel/polyfill', './src/index.js'],
-  output:{
-    filename: "main.[contenthash].js",
-    path: path.resolve(__dirname,"dist"),
-    clean:true,
-  },
+
   module: {
     rules: [
       {
@@ -36,19 +31,10 @@ module.exports = {
       },
     ],
   },
-  plugins: [new MiniCssExtractPlugin({filename: "main.[contenthash].css"}), new HtmlWebpackPlugin({
-    title: 'Phoenix',
-    template:"./src/template.html",
-    inject:'body',
-  }),
-new CleanWebpackPlugin(),
-],
+
   resolve: {
     extensions: [".js", ",jsx"],
   },
   devtool: "source-map",
-  devServer: {
-    static: "./dist",
-    hot: true,
-  },
+  
 };
