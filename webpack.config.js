@@ -1,6 +1,8 @@
 const path = require("path");
 var HtmlWebpackPlugin = require("html-webpack-plugin")
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const {CleanWebpackPlugin} = require("clean-webpack-plugin");
+const OptimizeCssAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 
 module.exports = {
   mode: "development",
@@ -34,11 +36,13 @@ module.exports = {
       },
     ],
   },
-  plugins: [new MiniCssExtractPlugin(), new HtmlWebpackPlugin({
+  plugins: [new MiniCssExtractPlugin({filename: "main.[contenthash].css"}), new HtmlWebpackPlugin({
     title: 'Phoenix',
     template:"./src/template.html",
     inject:'body',
-  })],
+  }),
+new CleanWebpackPlugin(),
+],
   resolve: {
     extensions: [".js", ",jsx"],
   },
