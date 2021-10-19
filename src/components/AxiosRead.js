@@ -3,8 +3,8 @@ import axios from "axios";
 import React from "react";
 
 
-  const  sendGetRequest = async (djangoApiUrl) => {
-    if(true){
+  const  sendGetRequest = async (djangoApiUrl,r) => {
+    if(r!==null){
     try {
       const datos = await axios.get(djangoApiUrl);
       // console.log("datos right after axios:",datos);
@@ -16,7 +16,7 @@ import React from "react";
       });
      
 
-      // console.log("***************Axios request complete - Updating state :", datosArray);
+      console.log("***************Axios request complete - Updating state :", datosArray);
       return(datosArray)
       ;
 
@@ -27,7 +27,7 @@ import React from "react";
     }
   }
   else {
-    return null
+    return [0]
   }
   };
 

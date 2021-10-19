@@ -3,6 +3,7 @@ import {
   select,
   scaleLinear,
   scaleTime,
+  scaleOrdinal,
   timeParse,
   timeFormat,
   axisLeft,
@@ -11,15 +12,16 @@ import {
   max,
   extent,
   timeHour,
+  timeMinute,
+  schemeSet2,
 } from "d3";
 import sendGetRequest from "../AxiosRead";
 import PropCharts from "./PropsChart";
-import CalculateChartProperties from "./CalculateChartProperties";
+import CalculateAxisProperties from "./CalculateAxisProperties";
+import CalculateUniqueProperties from "./CalculateUniqueProperties";
 // import { DelegatedPlugin } from "webpack";
 
-
 const ScatterPlot = () => {
-  
   const [r, setR] = useState(null);
   const [flag, setFlag] = useState(0);
   const svgRef = useRef();
@@ -29,25 +31,25 @@ const ScatterPlot = () => {
   useEffect(() => {
     console.log("1 @@@@@ inside Plot.js useEffect function", r);
     const { width, height, margin, tickSeparationRatio } = PropCharts();
-    console.log('flag:', flag);
-    // const djangoApiUrl = "http://192.168.1.222:8000/var-meassures/";
-    const axiosDatos = sendGetRequest(djangoApiUrl); 
-    axiosDatos.then(res => setR(res));
-    console.log('inside Plots.js r:', r)
+    console.log("flag:", flag);
+    const axiosDatos = sendGetRequest(djangoApiUrl, r);
+    axiosDatos.then((res) => setR(res));
+    console.log("---------->inside Plots.js r:", r);
     if (!r) {
       console.log("inside !r  Plots.js check");
       return <h1>loading...</h1>;
     }
     // const formatTime = timeFormat('%Y-%m-%d %H:%M:%S')
-    const formatTime = timeFormat('%y/%m/%d');
-    const xAxisProps = CalculateChartProperties(r.map((d) => d.date));
+    const formatTime = timeFormat("%y/%m/%d");
+    const xAxisProps = CalculateAxisProperties(r.map((d) => d.date));
 
-    const yAxisProps = CalculateChartProperties(r.map((d) => d.value));
-    //const legendData = legends(r.map(d => d.))
+    const yAxisProps = CalculateAxisProperties(r.map((d) => d.value));
+    const legendData = CalculateUniqueProperties(r.map((d) => d.variable));
+
     const svg = select(svgRef.current)
       .attr("width", width - margin.left)
       .attr("height", height - margin.top)
-      .style("background-color", "yellow")
+      .style("background-color", "white")
       .selectAll("g")
       .data([0])
       .join("g")
@@ -58,22 +60,20 @@ const ScatterPlot = () => {
     // ########### x axis setup ############
     var xmin = new Date(xAxisProps[0]);
     var xmax = new Date(xAxisProps[1]);
-    console.log('---->',xmin, typeof xmin);
+    // console.log("---->", xmin, typeof xmin);
 
     xmin.toDateString();
     xmax.toDateString();
-    var deltaX = timeHour.count(xmin,xmax);
-    // console.log('======>',xmin);
-    const xScale = scaleTime()
+    var deltaX = timeHour.count(xmin, xmax);
+    console.log('======>',xmin);
+    const xScale = scaleTime().clamp(true)
       /* enter data to modify y scale   */
       .range([0, width - margin.right - 250])
       .domain([xmin, xmax])
       .nice();
 
-    const xAxis = axisBottom(xScale)
-    .ticks(
-      deltaX/tickSeparationRatio
-    );
+    // const xAxis = axisBottom(xScale).ticks(deltaX / tickSeparationRatio);
+    const xAxis = axisBottom(xScale).ticks(timeHour.every(400));
     let xAxisG = svg
       .selectAll(".g-margin-plot")
       .data([0])
@@ -82,8 +82,9 @@ const ScatterPlot = () => {
         "transform",
         "translate(0 " + (height - margin.bottom).toString() + ")"
       )
+      .attr("class","x-axis")
       .call(xAxis)
-      .selectAll("text")     // here down will fix all thick mark orientations
+      .selectAll("text") // here down will fix all thick mark orientations
       .style("text-anchor", "end")
       .attr("dx", "-.8em")
       .attr("dy", ".15em")
@@ -95,8 +96,7 @@ const ScatterPlot = () => {
       .domain([0, yAxisProps[1]])
       .nice();
 
-    const yAxis = axisLeft(yScale)
-    .ticks(
+    const yAxis = axisLeft(yScale).ticks(
       (height - margin.top) / tickSeparationRatio
     );
     let yAxisG = svg
@@ -106,8 +106,11 @@ const ScatterPlot = () => {
       // .attr("transform", "translate(0 " + '20' + ")")
       .call(yAxis);
     // ########### legend setup ############
-    const legendData = [...new Set(r.map((d) => d.variable))];
+    console.log("datos para leyenda=", legendData);
+    //const legendData = legends(r.map(d => d.))
+    var color = scaleOrdinal().domain(legendData).range(schemeSet2);
 
+    //###################### svg generator for plot ###########################################
     svg
       .selectAll("circle")
       .data(r)
@@ -119,22 +122,19 @@ const ScatterPlot = () => {
       .attr("r", 5)
       .attr("cx", (r) => xScale(r.date))
       .attr("cy", (r) => yScale(r.value))
-      .attr("fill", 'red')
-      .attr("fill-opacity",0.5)
-      .attr('stroke', 'red');
+      .attr("fill", r=>color(r.variable))
+      .attr("fill-opacity", 0.5)
+      .attr("stroke", r=>color(r.variable));
 
-    return () => {   };
+    return () => {};
   }, [flag]);
-
-
 
   return (
     <div id="scatter-plot-A">
-        
       <svg ref={svgRef}></svg>
       <button
         onClick={() => {
-          setFlag(flag +1);
+          setFlag(flag + 1);
           //console.log("buttonchange radius:", r);
         }}
       >
