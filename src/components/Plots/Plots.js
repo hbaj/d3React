@@ -19,8 +19,10 @@ import sendGetRequest from "../AxiosRead";
 import PropCharts from "./PropsChart";
 import CalculateAxisProperties from "./CalculateAxisProperties";
 import CalculateUniqueProperties from "./CalculateUniqueProperties";
-// import { DelegatedPlugin } from "webpack";
-
+import Button from "@mui/material/Button";
+import Grid from "@mui/material/Grid";
+import Paper from '@mui/material/Paper';
+import Box from "@mui/material/Box";
 const ScatterPlot = () => {
   const [r, setR] = useState(null);
   const [flag, setFlag] = useState(0);
@@ -65,8 +67,9 @@ const ScatterPlot = () => {
     xmin.toDateString();
     xmax.toDateString();
     var deltaX = timeHour.count(xmin, xmax);
-    console.log('======>',xmin);
-    const xScale = scaleTime().clamp(true)
+    console.log("======>", xmin);
+    const xScale = scaleTime()
+      .clamp(true)
       /* enter data to modify y scale   */
       .range([0, width - margin.right - 250])
       .domain([xmin, xmax])
@@ -82,7 +85,7 @@ const ScatterPlot = () => {
         "transform",
         "translate(0 " + (height - margin.bottom).toString() + ")"
       )
-      .attr("class","x-axis")
+      .attr("class", "x-axis")
       .call(xAxis)
       .selectAll("text") // here down will fix all thick mark orientations
       .style("text-anchor", "end")
@@ -122,24 +125,48 @@ const ScatterPlot = () => {
       .attr("r", 5)
       .attr("cx", (r) => xScale(r.date))
       .attr("cy", (r) => yScale(r.value))
-      .attr("fill", r=>color(r.variable))
+      .attr("fill", (r) => color(r.variable))
       .attr("fill-opacity", 0.5)
-      .attr("stroke", r=>color(r.variable));
+      .attr("stroke", (r) => color(r.variable));
 
     return () => {};
   }, [flag]);
 
   return (
-    <div id="scatter-plot-A">
-      <svg ref={svgRef}></svg>
-      <button
-        onClick={() => {
-          setFlag(flag + 1);
-          //console.log("buttonchange radius:", r);
-        }}
+    <div id="scatter-plot-A" style={{ display: "inline-block" }}>
+      <Grid
+        container
+        direction="column"
+        justifyContent="space-evenly"
+        alignItems="center"
+
       >
-        Radius change
-      </button>
+        <Box>
+        <Paper elevation={24} >
+        <svg ref={svgRef}></svg>
+        </Paper>
+        </Box>
+        <Box sx={{
+    // boxShadow: 1, // theme.shadows[1]
+    color: 'primary.main', // theme.palette.primary.main
+    m: 1, // margin: theme.spacing(1)
+    p: {
+      xs: 1, // [theme.breakpoints.up('xs')]: { padding: theme.spacing(1) }
+    },
+    // zIndex: 'tooltip', // theme.zIndex.tooltip
+  }}>
+        <Button
+          variant="contained"
+          color="success"
+          onClick={() => {
+            setFlag(flag + 1);
+            //console.log("buttonchange radius:", r);
+          }}
+        >
+          Upload
+        </Button>
+        </Box>
+      </Grid>
     </div>
   );
 };
