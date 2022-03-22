@@ -28,6 +28,12 @@ function App() {
         alignItems="center"
       >
         <ScatterPlot />
+        <ScatterPlot />
+        <ScatterPlot />
+        <ScatterPlot />
+        <ScatterPlot />
+        <ScatterPlot />
+        <ScatterPlot />
       </Grid>
     </>
   );

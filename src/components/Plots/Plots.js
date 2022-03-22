@@ -12,6 +12,8 @@ import {
   max,
   extent,
   timeHour,
+  timeDay,
+  timeDays,
   timeMinute,
   schemeSet2,
 } from "d3";
@@ -21,7 +23,7 @@ import CalculateAxisProperties from "./CalculateAxisProperties";
 import CalculateUniqueProperties from "./CalculateUniqueProperties";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
-import Paper from '@mui/material/Paper';
+import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 const ScatterPlot = () => {
   const [r, setR] = useState(null);
@@ -62,7 +64,7 @@ const ScatterPlot = () => {
     // ########### x axis setup ############
     var xmin = new Date(xAxisProps[0]);
     var xmax = new Date(xAxisProps[1]);
-    // console.log("---->", xmin, typeof xmin);
+    console.log("---->", xmin, typeof xmin,"\n->",new Date());
 
     xmin.toDateString();
     xmax.toDateString();
@@ -76,7 +78,7 @@ const ScatterPlot = () => {
       .nice();
 
     // const xAxis = axisBottom(xScale).ticks(deltaX / tickSeparationRatio);
-    const xAxis = axisBottom(xScale).ticks(timeHour.every(400));
+    const xAxis = axisBottom(xScale).ticks(timeDay.every() ).tickFormat(timeFormat("%m-%d"));
     let xAxisG = svg
       .selectAll(".g-margin-plot")
       .data([0])
@@ -139,32 +141,32 @@ const ScatterPlot = () => {
         direction="column"
         justifyContent="space-evenly"
         alignItems="center"
-
       >
         <Box>
-        <Paper elevation={24} >
-        <svg ref={svgRef}></svg>
-        </Paper>
+          <Paper elevation={24}>
+            <svg ref={svgRef}></svg>
+          </Paper>
         </Box>
-        <Box sx={{
-    // boxShadow: 1, // theme.shadows[1]
-    color: 'primary.main', // theme.palette.primary.main
-    m: 1, // margin: theme.spacing(1)
-    p: {
-      xs: 1, // [theme.breakpoints.up('xs')]: { padding: theme.spacing(1) }
-    },
-    // zIndex: 'tooltip', // theme.zIndex.tooltip
-  }}>
-        <Button
-          variant="contained"
-          color="success"
-          onClick={() => {
-            setFlag(flag + 1);
-            //console.log("buttonchange radius:", r);
+        <Box
+          sx={{
+            // boxShadow: 1, // theme.shadows[1]
+            color: "primary.main", // theme.palette.primary.main
+            m: 1, // margin: theme.spacing(1)
+            p: {
+              xs: 1, // [theme.breakpoints.up('xs')]: { padding: theme.spacing(1) }
+            },
+            // zIndex: 'tooltip', // theme.zIndex.tooltip
           }}
         >
-          Upload
-        </Button>
+          <Button
+            variant="contained"
+            color="success"
+            onClick={() => {
+              setFlag(flag + 1);
+            }}
+          >
+            Upload
+          </Button>
         </Box>
       </Grid>
     </div>
