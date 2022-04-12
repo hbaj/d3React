@@ -9,11 +9,12 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import { BrowserRouter as Router, Routes, Route, Navigate, Link } from "react-router-dom";
+import HomeButton from "./Buttons/HomeButton"
 
 function PcCheck() {
   return (
     <>
-      <PrimarySearchAppBar />
+      
       <Typography
         margin="10px"
         variant="h5"
@@ -36,38 +37,38 @@ function PcCheck() {
   );
 }
 function HomePage() {
-  return <div className="page">🏠 Page</div>;
+  return <>
+  <h1> inside homepage</h1>
+  <Link to="/pc-check" className="link"> PC-check </Link> 
+  
+      <Link to="/ppid" className="link">
+        recipes
+      </Link>
+
+  </>;
 }
 
 function NotFoundPage() {
   return <div className="page">🧐 Page</div>;
 }
 
-function ApplePage() {
-  return <div className="page">🍎 Page</div>;
+function Ppid() {
+  return <div className="page">🍎 Recipes</div>;
 }
 function App() {
   return (
     <Router>
+      <PrimarySearchAppBar />
+      <HomeButton/>
     <div>
-      <Link to="/" className="link">
-        Home
-      </Link>
 
-      <Link to="/pc-check" className="link">
-        Apple
-      </Link>
-      <Link to="/applet" className="link">
-        Applet
-      </Link>
-      <Link to="/test" className="link">
-        Test
-      </Link>
+
+
     </div>
     <Routes>
       <Route path="/" element={<HomePage />} />
       <Route path="/pc-check" element={<PcCheck />} />
-      <Route path="/apple" element={<ApplePage />} />
+      <Route path="/ppid" element={<Ppid />} />
       <Route path="/404" element={<NotFoundPage />} />
       
       <Route path="*" element={<Navigate replace to="/404" />} />
