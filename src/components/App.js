@@ -7,8 +7,10 @@ import { ContactForm } from "./Forms/form";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import Grid from '@mui/material/Grid'
-function App() {
+import Grid from "@mui/material/Grid";
+import { BrowserRouter as Router, Routes, Route, Navigate, Link } from "react-router-dom";
+
+function PcCheck() {
   return (
     <>
       <PrimarySearchAppBar />
@@ -29,13 +31,48 @@ function App() {
       >
         <ScatterPlot />
         <ScatterPlot />
-        <ScatterPlot />
-        <ScatterPlot />
-        <ScatterPlot />
-        <ScatterPlot />
-        <ScatterPlot />
       </Grid>
     </>
+  );
+}
+function HomePage() {
+  return <div className="page">🏠 Page</div>;
+}
+
+function NotFoundPage() {
+  return <div className="page">🧐 Page</div>;
+}
+
+function ApplePage() {
+  return <div className="page">🍎 Page</div>;
+}
+function App() {
+  return (
+    <Router>
+    <div>
+      <Link to="/" className="link">
+        Home
+      </Link>
+
+      <Link to="/pc-check" className="link">
+        Apple
+      </Link>
+      <Link to="/applet" className="link">
+        Applet
+      </Link>
+      <Link to="/test" className="link">
+        Test
+      </Link>
+    </div>
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/pc-check" element={<PcCheck />} />
+      <Route path="/apple" element={<ApplePage />} />
+      <Route path="/404" element={<NotFoundPage />} />
+      
+      <Route path="*" element={<Navigate replace to="/404" />} />
+    </Routes>
+  </Router>
   );
 }
 
