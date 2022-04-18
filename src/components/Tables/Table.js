@@ -6,28 +6,104 @@ import { useGlobalFilter, useSortBy, useTable } from "react-table";
 
 function Table() {
   //   console.log(datos);
+
   const data = useMemo(
     () => [
-        {
-          "color": "purple",
-          "type": "minivan",
-          "registration": new Date('2017-01-03'),
-          "capacity": 7
-        },
-        {
-          "color": "red",
-          "type": "station wagon",
-          "registration": new Date('2018-03-03'),
-          "capacity": 5
-        },
+      {
+        firstName: 'Alice',
+        lastName: 'Johnson',
+        age: 9,
+        gender: 'F',
+        grade: 4,
+      },
+      {
+        firstName: 'Mike',
+        lastName: 'Ford',
+        age: 5,
+        gender: 'M',
+        grade: 1,
+      },
+      {
+        firstName: 'John',
+        lastName: 'Smith',
+        age: 8,
+        gender: 'M',
+        grade: 4,
+      },
+      {
+        firstName: 'Joe',
+        lastName: 'Johnson',
+        age: 11,
+        gender: 'M',
+        grade: 6,
+      },
+      {
+        firstName: 'Linda',
+        lastName: 'Ford',
+        age: 8,
+        gender: 'F',
+        grade: 5,
+      },
+      {
+        firstName: 'Noah',
+        lastName: 'Wilson',
+        age: 9,
+        gender: 'M',
+        grade: 3,
+      },
+      {
+        firstName: 'Emma',
+        lastName: 'Lee',
+        age: 7,
+        gender: 'F',
+        grade: 3,
+      },
+      {
+        firstName: 'James',
+        lastName: 'Jones',
+        age: 10,
+        gender: 'M',
+        grade: 5,
+      },
+      {
+        firstName: 'Mia',
+        lastName: 'Brown',
+        age: 8,
+        gender: 'F',
+        grade: 5,
+      },
+      {
+        firstName: 'William',
+        lastName: 'Davis',
+        age: 11,
+        gender: 'M',
+        grade: 6,
+      },
     ],
     []
   );
   const columns = useMemo(
     () => [
-      { Header: "ID", accesor: "color" },
-      { Header: "TITLE_", accesor: "type" },
-      { Header: "PRICE", accesor: "registration" },
+      {
+        Header: 'First Name',
+        accessor: 'firstName',
+      },
+      {
+        Header: 'Last Name',
+        accessor: 'lastName',
+      },
+      {
+        Header: 'Age',
+        accessor: 'age',
+      },
+      {
+        Header: 'Gender',
+        accessor: 'gender',
+      },
+      {
+        Header: 'Grade',
+        accessor: 'grade',
+      },
     ],
     []
   );
@@ -41,7 +117,7 @@ function Table() {
   // console.log('>>',rows.map((row)=>console.log(row)),'<<' )
   return (
     <>
-       <h2> inside table</h2>
+       <h2>  table example</h2>
     
     <table {...getTableProps()}>
       <thead>
