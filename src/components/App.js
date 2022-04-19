@@ -30,7 +30,7 @@ function PcCheck() {
         component="div"
         align="center"
       >
-        hola from inside APP
+        Scatter Plots
       </Typography>
       <Grid
         container

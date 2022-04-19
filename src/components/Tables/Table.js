@@ -1,6 +1,7 @@
 //use rafc for snippet shorcut
 import React, { useState, useEffect, useMemo } from "react";
-import { useGlobalFilter, useSortBy, useTable } from "react-table";
+import { useGlobalFilter, useSortBy, useTable} from "react-table";
+import { GlobalFilter } from "./GlobalFilter";
 
 
 
@@ -109,22 +110,30 @@ function Table() {
   );
   //   console.log("-->",data);
   //   console.log("-->",columns);
-  const tableInstance = useTable({ columns, data });
+  const tableInstance = useTable({ columns, data },useGlobalFilter,useSortBy);
 
+  
   //   console.log(getTableProps, getTableBodyProps, headerGroups, rows, prepareRow );
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow , state, setGlobalFilter} =
     tableInstance;
+
+    const {globalFilter} = state
   // console.log('>>',rows.map((row)=>console.log(row)),'<<' )
   return (
     <>
        <h2>  table example</h2>
-    
+    <GlobalFilter filter = {globalFilter} setFilter = {setGlobalFilter}/>
     <table {...getTableProps()}>
       <thead>
         {headerGroups.map(headerGroup => (
           <tr {...headerGroup.getHeaderGroupProps()}>
             {headerGroup.headers.map(column => (
-              <th {...column.getHeaderProps()}>{column.render('Header')}</th>
+              <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                {column.render('Header')}
+                <span>
+                  {column.isSorted ? (column.isSortedDesc ? ' ⇑' : ' ⇓') : ''}
+                </span>
+                </th>
             ))}
           </tr>
         ))}
