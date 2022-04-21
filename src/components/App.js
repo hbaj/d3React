@@ -69,6 +69,7 @@ function Ppid() {
   <>
     <div className="page">🍎 Recipes</div>
     <Table/>
+    <Table/>
   </>);
 }
 function App() {
