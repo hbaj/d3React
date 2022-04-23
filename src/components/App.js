@@ -6,7 +6,7 @@ import SideBar from "./Bars/SideBar";
 import ClippedDrawer from "./Bars/SideBar";
 import Table from "./Tables/Table";
 
-import { ContactForm } from "./Forms/form";
+import Form from "./Forms/form";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
@@ -67,8 +67,8 @@ function NotFoundPage() {
 function Ppid() {
   return(
   <>
-    <div className="page">🍎 Recipes</div>
-    <Table/>
+    <div className="page">Recipes</div>
+    <Form/>
     <Table/>
   </>);
 }
