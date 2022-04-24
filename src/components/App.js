@@ -65,9 +65,10 @@ function NotFoundPage() {
 }
 
 function Ppid() {
+  
   return(
   <>
-    <div className="page">Recipes</div>
+    <h1>PPID SUMMARY</h1>
     <Form/>
     <Table/>
   </>);

@@ -29,7 +29,7 @@ const ScatterPlot = () => {
   const [r, setR] = useState(null);
   const [flag, setFlag] = useState(0);
   const svgRef = useRef();
-  const { width, height, margin, tickSeparationRatio } = PropCharts();
+    const { width, height, margin, tickSeparationRatio } = PropCharts();
 
   const djangoApiUrl = "http://192.168.1.222:8000/var-meassures/";
   useEffect(() => {
